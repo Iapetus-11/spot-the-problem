@@ -1,0 +1,1 @@
+SELECT * FROM users WHERE login_hash = SHA512(($1 || '#' || $2)::BYTEA);
