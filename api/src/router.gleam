@@ -1,4 +1,4 @@
-import services/users/routes/login as users_login
+import api/users/routes/login as users_login
 import web.{type Context}
 import wisp.{type Request, type Response}
 

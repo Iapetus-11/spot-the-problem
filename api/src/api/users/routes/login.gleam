@@ -1,3 +1,4 @@
+import api/users/sql as users_sql
 import common/dynamic_utils.{encode_errors_to_json_string}
 import gleam/bit_array
 import gleam/dynamic
@@ -5,7 +6,6 @@ import gleam/http
 import gleam/json
 import gleam/option
 import gleam/pgo
-import services/users/sql as users_sql
 import web.{type Context}
 import wisp.{type Request, type Response}
 
