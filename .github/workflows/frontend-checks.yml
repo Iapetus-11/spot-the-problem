@@ -37,5 +37,8 @@ jobs:
       - name: Run linter
         run: npx eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore
 
+      - name: Check formatting
+        run: npx prettier src/ --check
+
       - name: Build project
         run: npm run build

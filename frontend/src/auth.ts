@@ -1,17 +1,17 @@
-import { reactive, ref, type App } from "vue"
-import { useAsyncState } from "./utils";
+import { ref, type App } from 'vue';
+import { useAsyncState } from './utils';
 
 async function _logIn(username: string, password: string): Promise<string> {
-        const response = fetch(import.meta.env.VITE_API_BASE_URL, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        })
+    const response = fetch(import.meta.env.VITE_API_BASE_URL, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+    });
 
-        return response.then(res => res.json()).then(res => res.login_hash);
-    }
+    return response.then((res) => res.json()).then((res) => res.login_hash);
+}
 
 function auth() {
     const loginState = ref();
@@ -22,7 +22,7 @@ function auth() {
     return {
         loginState,
         logIn,
-    }
+    };
 }
 
 function install(app: App) {
@@ -31,4 +31,4 @@ function install(app: App) {
 
 export default {
     install,
-}
+};

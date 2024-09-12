@@ -1,4 +1,4 @@
-import { ref, type Ref } from "vue";
+import { ref, type Ref } from 'vue';
 
 export interface AsyncState<T> {
     value: Ref<T | undefined>;
@@ -29,7 +29,7 @@ export function useAsyncState<T>(promise: Promise<T>): AsyncState<T> {
         (err) => {
             state.error.value = err;
             state.loading.value = false;
-        },
+        }
     );
 
     return state;
