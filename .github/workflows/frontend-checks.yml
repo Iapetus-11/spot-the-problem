@@ -1,0 +1,41 @@
+name: Check Front-End
+
+on: [push, pull_request]
+
+jobs:
+  run-checks:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: shared-models
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node 21
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
+      - name: Install NPM dependencies
+        # Skip post-install scripts for now to prevent token theft
+        run: |
+          npm config set '//npm.fontawesome.com/:_authToken' '${NPM_FONTAWESOME_TOKEN}'
+          npm ci --ignore-scripts
+          npm config delete '//npm.fontawesome.com/:_authToken'
+        env:
+          NPM_FONTAWESOME_TOKEN: ${{ secrets.NPM_FONTAWESOME_TOKEN }}
+
+      - name: Run post-install scripts
+        run: npm rebuild
+
+      - name: Check types
+        run: npm run type-check
+
+      - name: Run linter
+        run: npx eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore
+
+      - name: Build project
+        run: npm run build
