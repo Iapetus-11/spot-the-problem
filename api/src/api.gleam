@@ -1,10 +1,11 @@
+import api/web.{Context}
 import dot_env
 import dot_env/env
 import gleam/erlang/process
 import gleam/pgo
 import mist
 import router
-import web.{Context}
+import services/problem_sets.{list_problem_sets}
 import wisp
 import wisp/wisp_mist
 
@@ -24,7 +25,9 @@ pub fn main() {
   let assert Ok(db_config) = pgo.url_config(database_url)
   let db = pgo.connect(pgo.Config(..db_config, pool_size: 2))
 
-  let context = Context(db: db)
+  let problem_sets = list_problem_sets()
+
+  let context = Context(db:, problem_sets:)
 
   let assert Ok(_) =
     wisp_mist.handler(router.handle_request(_, context), secret_key)

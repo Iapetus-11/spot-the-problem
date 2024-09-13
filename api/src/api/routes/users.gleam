@@ -1,4 +1,5 @@
-import api/users/sql as users_sql
+import api/web.{type Context}
+import common/authentication
 import common/dynamic_utils.{encode_errors_to_json_string}
 import gleam/bit_array
 import gleam/dynamic
@@ -6,7 +7,7 @@ import gleam/http
 import gleam/json
 import gleam/option
 import gleam/pgo
-import web.{type Context}
+import services/users/sql as users_sql
 import wisp.{type Request, type Response}
 
 type LoginCredentials {
@@ -29,7 +30,7 @@ fn require_login_credentials(req: Request, continue) {
   }
 }
 
-pub fn handler(req: Request, ctx: Context) -> Response {
+pub fn post_login(req: Request, ctx: Context) -> Response {
   use <- wisp.require_method(req, http.Post)
   use login_creds <- require_login_credentials(req)
 
@@ -67,4 +68,18 @@ pub fn handler(req: Request, ctx: Context) -> Response {
     Ok(pgo.Returned(0, [])) -> wisp.response(403)
     _ -> wisp.internal_server_error()
   }
+}
+
+pub fn get_self(req: Request, ctx: Context) -> Response {
+  use user <- authentication.require_authorized_user(req, ctx.db)
+
+  wisp.json_response(
+    json.to_string_builder(
+      json.object([
+        #("id", json.int(user.id)),
+        #("username", json.string(user.username)),
+      ]),
+    ),
+    200,
+  )
 }
