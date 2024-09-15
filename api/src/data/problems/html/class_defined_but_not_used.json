@@ -1,5 +1,5 @@
 {
-    "type": "syntax",
+    "category": "syntax",
     "description": "From the look of the `.example` class, it seems that the div should be red and have some padding but it doesn't.",
     "answer": "You have defined the `.example` class, but haven't used it on the div. Line 13 needs to look like `<div class=\"example\">.",
     "difficulty": 1

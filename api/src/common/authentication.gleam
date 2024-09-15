@@ -54,9 +54,7 @@ pub fn require_authorized_user(
       1,
       [users_sql.FindUserFromLoginHashRow(id, option.Some(username), _)],
     )) -> continue(AuthorizedUser(id, username))
-    // TODO: Add an error messsage?
     Ok(pgo.Returned(0, [])) -> wisp.response(403)
-    // TODO: Add an error message
     _ -> wisp.internal_server_error()
   }
 }

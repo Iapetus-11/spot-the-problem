@@ -9,8 +9,6 @@ import services/problem_sets.{list_problem_sets}
 import wisp
 import wisp/wisp_mist
 
-// https://gleaming.dev/articles/building-your-first-gleam-web-app/
-
 pub fn main() {
   wisp.configure_logger()
 
