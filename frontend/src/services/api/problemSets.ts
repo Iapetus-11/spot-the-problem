@@ -1,6 +1,7 @@
 import { request, type FetchResponseValue } from '@/services/requests';
 
 export type ProblemInfo = {
+    name: string;
     category: string;
     description: string;
     answer: string;

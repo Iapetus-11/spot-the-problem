@@ -48,7 +48,7 @@
             <a
                 v-for="problemSetName in problemSetsState!.data"
                 :key="problemSetName"
-                class="cursor-pointer rounded-md bg-bittersweet-base p-12 uppercase tracking-widest text-white shadow-sm shadow-peach-base transition-shadow hover:shadow-lg text-xl"
+                class="card cursor-pointer p-14 text-xl tracking-widest uppercase"
                 :href="`problem-set/${problemSetName}`"
             >
                 {{ problemSetName }}

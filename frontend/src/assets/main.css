@@ -20,6 +20,10 @@
     .button {
         @apply flex items-center rounded-lg bg-peach-base p-1.5 px-2 text-bittersweet-base transition-colors hover:bg-bittersweet-base hover:text-peach-base;
     }
+
+    .card {
+        @apply rounded-md bg-bittersweet-base text-white shadow-sm shadow-peach-base transition-shadow hover:shadow-lg;
+    }
 }
 
 /* Transitions */
