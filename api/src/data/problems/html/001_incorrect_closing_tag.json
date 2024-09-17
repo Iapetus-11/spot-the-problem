@@ -1,4 +1,5 @@
 {
+    "name": "Weird HTML 1",
     "category": "syntax",
     "description": "The code appears to work just fine, but has a syntax error which could cause additional errors in the future.",
     "answer": "The closing tag of the div is incorrect, it should be `</div>` not `<div>`.",
