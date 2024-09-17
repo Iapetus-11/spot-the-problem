@@ -1,5 +1,4 @@
 import { ref, type App } from 'vue';
-import { useAsyncState } from './utils';
 
 async function _logIn(username: string, password: string): Promise<string> {
     const response = fetch(import.meta.env.VITE_API_BASE_URL, {

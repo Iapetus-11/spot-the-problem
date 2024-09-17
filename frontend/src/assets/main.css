@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    * {
+        @apply font-mono;
+    }
+
+    body {
+        @apply select-none bg-egg-base;
+    }
+
+    a {
+        @apply cursor-pointer;
+    }
+}
+
+@layer components {
+    .button {
+        @apply flex items-center rounded-lg bg-peach-base p-1.5 px-2 text-bittersweet-base transition-colors hover:bg-bittersweet-base hover:text-peach-base;
+    }
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+    @apply transition ease-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+    @apply opacity-0;
+}
