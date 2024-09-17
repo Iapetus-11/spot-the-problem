@@ -13,7 +13,7 @@ pub fn get_list(_req: Request, ctx: Context) -> Response {
 }
 
 pub fn get_problems_list(
-  req: Request,
+  _req: Request,
   ctx: Context,
   problem_set_name: String,
 ) -> Response {
@@ -26,6 +26,7 @@ pub fn get_problems_list(
             // to save on memory because this API won't be used often, still, it could be cached
             let p = problem_sets.get_problem_info(problem_set.name, p)
             json.object([
+              #("name", json.string(p.name)),
               #("category", json.string(p.category)),
               #("description", json.string(p.description)),
               #("answer", json.string(p.answer)),

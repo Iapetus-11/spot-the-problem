@@ -11,6 +11,7 @@ pub type ProblemSet {
 
 pub type ProblemInfo {
   ProblemInfo(
+    name: String,
     category: String,
     description: String,
     answer: String,
@@ -47,8 +48,9 @@ pub fn get_problem_info(
 
   let assert Ok(problem_info) =
     json.decode(file, fn(data) {
-      dynamic.decode4(
+      dynamic.decode5(
         ProblemInfo,
+        dynamic.field("name", dynamic.string),
         dynamic.field("category", dynamic.string),
         dynamic.field("description", dynamic.string),
         dynamic.field("answer", dynamic.string),
