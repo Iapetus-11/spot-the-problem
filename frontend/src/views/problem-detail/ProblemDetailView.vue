@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { getProblem, type ProblemInfo } from '@/services/api/problemSets';
     import type { AsyncDataState } from '@/utils';
-    import { onBeforeMount, onUnmounted, reactive, ref } from 'vue';
+    import { nextTick, onBeforeMount, onUnmounted, reactive, ref } from 'vue';
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
     import ErrorWell from '@/components/ErrorWell.vue';
 
@@ -35,10 +35,21 @@
         problemLines.value = problemState.data?.content.split('\n').map((line, idx) => ({ id: idx, content: (line + '\n') }));
     }
 
-    const problemCodeContainer = ref();
+    const problemCodeContainerElement = ref<HTMLElement>();
+    const answerJustificationElement = ref<HTMLTextAreaElement>();
 
-    const selectedLine = ref();
+    const selectedLine = ref<number | null>(null);
     const answerJustification = ref('');
+
+    function handleLineClick(lineId: number) {
+        if (selectedLine.value === lineId) {
+            selectedLine.value = null;
+        } else {
+            selectedLine.value = lineId;
+        }
+
+        nextTick(() => answerJustificationElement.value?.focus());
+    }
 
     onBeforeMount(() => {
         loadProblem();
@@ -72,22 +83,35 @@
             </div>
 
             <div class="flex gap-6">
-                <code ref="problemCodeContainer" class="flex flex-col py-2 pl-3 pr-0 card whitespace-pre overflow-x-auto w-full">
+                <code ref="problemCodeContainerElement" class="flex flex-col py-2 pl-3 pr-0 card whitespace-pre overflow-x-auto w-full">
                     <span
                         v-for="{ id, content } in problemLines"
                         :key="id"
                         class="hover:bg-peach-base hover:text-cerulean-base w-full transition-colors rounded-md -ml-1.5 pl-1.5 cursor-pointer"
                         :class="{'bg-peach-base text-cerulean-base': selectedLine === id}"
-                        @click="selectedLine === id ? selectedLine = null : selectedLine = id"
+                        @click="handleLineClick(id)"
                     >
                         <span class="mr-1 opacity-50">{{ id.toString().padStart(2, '0') }}</span>
                         {{ content }}
                     </span>
                 </code>
 
-                <div class="card min-w-[33%] px-3 py-2">
-                    <p v-if="selectedLine !== null" class="mb-1">Please explain the problem on line {{ selectedLine }}:</p>
-                    <textarea v-model="answerJustification" class="bg-transparent w-full h-full"></textarea>
+                <div class="relative card min-w-[33%] px-3 py-2">
+                    <Transition name="fade" mode="out-in">
+                        <p v-if="selectedLine === null" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center min-w-[19rem]">
+                            Select a line on the left, then type in your answer here.
+                        </p>
+                        <div v-else>
+                            <p class="mb-1">Please explain the problem on line {{ selectedLine }}:</p>
+
+                            <textarea
+                                v-model="answerJustification"
+                                class="bg-transparent w-full h-full"
+                                ref="answerJustificationElement"
+                            >
+                            </textarea>
+                        </div>
+                    </Transition>
                 </div>
             </div>
         </div>
