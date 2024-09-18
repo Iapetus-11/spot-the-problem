@@ -1,0 +1,9 @@
+{
+    "id": "002",
+    "name": "Bad CSS 1",
+    "category": "syntax",
+    "description": "The div with 'Lorem ipsum' is shown, but doesn't have a purple background.",
+    "answer": "The first semicolon on line 6 needs to be a colon instead.",
+    "difficulty": 1,
+    "file_ext": "html"
+}

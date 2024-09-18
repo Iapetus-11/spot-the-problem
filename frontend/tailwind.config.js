@@ -19,7 +19,7 @@ export default {
         peach: {
           'base': '#FED9B7',
         },
-        bittersweet: {
+        salmon: {
           'base': '#F07167'
         }
       }

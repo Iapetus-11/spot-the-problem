@@ -10,6 +10,8 @@ pub fn handle_request(req: Request, ctx: Context) -> Response {
     ["problem_sets"] -> problem_set_routes.get_list(req, ctx)
     ["problem_sets", problem_set_name] ->
       problem_set_routes.get_problems_list(req, ctx, problem_set_name)
+    ["problem_sets", problem_set_name, problem_name] ->
+      problem_set_routes.get_problem(req, ctx, problem_set_name, problem_name)
     _ -> wisp.not_found()
   }
 }

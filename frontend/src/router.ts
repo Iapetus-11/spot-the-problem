@@ -11,7 +11,13 @@ const router = createRouter({
         {
             path: '/problem-set/:problemSetName',
             name: 'problem-set-detail',
-            component: () => import('@/views/problem-set/ProblemSetView.vue'),
+            component: () => import('@/views/problem-set-detail/ProblemSetDetailView.vue'),
+            props: true,
+        },
+        {
+            path: '/problem-set/:problemSetName/:problemId',
+            name: 'problem-detail',
+            component: () => import('@/views/problem-detail/ProblemDetailView.vue'),
             props: true,
         },
         {

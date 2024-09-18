@@ -16,14 +16,14 @@
 
         problemSetsState.cancel = cancel;
         problemSetsState.loading = true;
-        
+
         try {
             problemSetsState.data = await data;
         } catch (error) {
             console.error(error);
             problemSetsState.error = error;
         }
-        
+
         problemSetsState.loading = false;
     }
 
@@ -38,18 +38,24 @@
 
 <template>
     <Transition name="fade" mode="out-in">
-        <div v-if="problemSetsState?.loading" class="flex justify-center mt-[35vh] -translate-y-1/2">
+        <div
+            v-if="problemSetsState?.loading"
+            class="mt-[35vh] flex -translate-y-1/2 justify-center"
+        >
             <LoadingSpinner />
         </div>
-        <div v-else-if="problemSetsState?.error" class="flex justify-center mt-[35vh] -translate-y-1/2">
+        <div
+            v-else-if="problemSetsState?.error"
+            class="mt-[35vh] flex -translate-y-1/2 justify-center"
+        >
             <ErrorWell @retry="loadProblemSets" />
         </div>
         <div v-else class="flex gap-6 p-6">
             <a
                 v-for="problemSetName in problemSetsState!.data"
                 :key="problemSetName"
-                class="card cursor-pointer p-14 text-xl tracking-widest uppercase"
-                :href="`problem-set/${problemSetName}`"
+                class="card card-hoverable cursor-pointer p-14 text-xl uppercase tracking-widest"
+                :href="`/problem-set/${problemSetName}`"
             >
                 {{ problemSetName }}
             </a>

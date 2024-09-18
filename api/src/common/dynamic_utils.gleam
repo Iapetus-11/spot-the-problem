@@ -9,7 +9,13 @@ pub fn encode_errors_to_json_string(errors: List(DecodeError)) -> StringBuilder 
     list.map(errors, fn(err) {
       #(
         err.path,
-        json.string("Expected " <> err.expected <> " but found " <> err.found <> " instead."),
+        json.string(
+          "Expected "
+          <> err.expected
+          <> " but found "
+          <> err.found
+          <> " instead.",
+        ),
       )
     })
 

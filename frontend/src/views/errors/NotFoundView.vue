@@ -6,7 +6,7 @@
 <template>
     <Transition name="fade" appear>
         <div class="mt-[25vh] flex w-full flex-col items-center gap-3">
-            <h2 class="text-3xl text-bittersweet-base">404 Page Not Found</h2>
+            <h2 class="text-3xl text-salmon-base">404 Page Not Found</h2>
 
             <a href="/" class="button">
                 <FontAwesomeIcon :icon="faLeft" class="mr-2" />
