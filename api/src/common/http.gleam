@@ -22,23 +22,18 @@ pub fn require_header_value(
   {
     Ok(value) -> continue(value)
     _ ->
-      wisp.json_response(
-        json.to_string_builder(
+      json.object([
+        #(
+          "headers",
           json.object([
             #(
-              "headers",
-              json.object([
-                #(
-                  header,
-                  json.array(["Expected value but found nothing."], json.string(
-                    _,
-                  )),
-                ),
-              ]),
+              header,
+              json.array(["Expected value but found nothing."], json.string(_)),
             ),
           ]),
         ),
-        status_if_missing,
-      )
+      ])
+      |> json.to_string_builder()
+      |> wisp.json_response(status_if_missing)
   }
 }
