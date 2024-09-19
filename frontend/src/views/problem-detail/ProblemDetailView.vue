@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { getProblem, type ProblemInfo } from '@/services/api/problemSets';
     import type { AsyncDataState } from '@/utils';
-    import { nextTick, onBeforeMount, onUnmounted, reactive, ref } from 'vue';
+    import { onBeforeMount, onUnmounted, reactive, ref, watch } from 'vue';
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
     import ErrorWell from '@/components/ErrorWell.vue';
 
@@ -16,7 +16,7 @@
         data: null,
         cancel: null,
     });
-    const problemLines = ref<{ id: number, content: string }[]>()
+    const problemLines = ref<{ id: number; content: string }[]>();
     async function loadProblem() {
         const { data, cancel } = getProblem(props.problemSetName, props.problemId);
 
@@ -32,7 +32,9 @@
 
         problemState.loading = false;
 
-        problemLines.value = problemState.data?.content.split('\n').map((line, idx) => ({ id: idx, content: (line + '\n') }));
+        problemLines.value = problemState.data?.content
+            .split('\n')
+            .map((line, idx) => ({ id: idx, content: line + '\n' }));
     }
 
     const problemCodeContainerElement = ref<HTMLElement>();
@@ -47,8 +49,19 @@
         } else {
             selectedLine.value = lineId;
         }
+    }
 
-        nextTick(() => answerJustificationElement.value?.focus());
+    watch(answerJustificationElement, (answerJustificationElement) => {
+        answerJustificationElement?.focus();
+    });
+
+    function clearAnswer() {
+        answerJustification.value = '';
+        selectedLine.value = null;
+    }
+
+    function submit() {
+        console.log('submit!');
     }
 
     onBeforeMount(() => {
@@ -58,10 +71,6 @@
     onUnmounted(() => {
         problemState.cancel?.();
     });
-
-    window.addEventListener('mousemove', () => {
-        console.log(window.getSelection());
-    })
 </script>
 
 <template>
@@ -83,12 +92,15 @@
             </div>
 
             <div class="flex gap-6">
-                <code ref="problemCodeContainerElement" class="flex flex-col py-2 pl-3 pr-0 card whitespace-pre overflow-x-auto w-full">
+                <code
+                    ref="problemCodeContainerElement"
+                    class="card flex w-full flex-col overflow-x-auto whitespace-pre py-2 pl-3 pr-0"
+                >
                     <span
                         v-for="{ id, content } in problemLines"
                         :key="id"
-                        class="hover:bg-peach-base hover:text-cerulean-base w-full transition-colors rounded-md -ml-1.5 pl-1.5 cursor-pointer"
-                        :class="{'bg-peach-base text-cerulean-base': selectedLine === id}"
+                        class="-ml-1.5 w-full cursor-pointer rounded-md pl-1.5 transition-colors hover:bg-peach-base hover:text-cerulean-base"
+                        :class="{ 'bg-peach-base text-cerulean-base': selectedLine === id }"
                         @click="handleLineClick(id)"
                     >
                         <span class="mr-1 opacity-50">{{ id.toString().padStart(2, '0') }}</span>
@@ -96,23 +108,50 @@
                     </span>
                 </code>
 
-                <div class="relative card min-w-[33%] px-3 py-2">
-                    <Transition name="fade" mode="out-in">
-                        <p v-if="selectedLine === null" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center min-w-[19rem]">
-                            Select a line on the left, then type in your answer here.
-                        </p>
-                        <div v-else>
-                            <p class="mb-1">Please explain the problem on line {{ selectedLine }}:</p>
-
-                            <textarea
-                                v-model="answerJustification"
-                                class="bg-transparent w-full h-full"
-                                ref="answerJustificationElement"
+                <form @submit.prevent="submit" class="flex min-w-[33%] flex-col gap-3">
+                    <div class="card relative h-full w-full px-3 py-2">
+                        <TransitionGroup name="fade" mode="out-in">
+                            <p
+                                v-if="selectedLine === null"
+                                class="absolute left-1/2 top-1/2 min-w-[90%] -translate-x-1/2 -translate-y-1/2 text-center"
                             >
-                            </textarea>
-                        </div>
-                    </Transition>
-                </div>
+                                Select a line on the left, then type in your answer here.
+                            </p>
+
+                            <template v-else>
+                                <div class="flex h-full flex-col pb-10">
+                                    <p class="mb-1">
+                                        Please explain the problem on line {{ selectedLine }}:
+                                    </p>
+
+                                    <textarea
+                                        v-model="answerJustification"
+                                        class="answer-justification-textarea h-full w-full bg-transparent resize-none placeholder:opacity-50 placeholder:text-white"
+                                        ref="answerJustificationElement"
+                                        placeholder="Type here..."
+                                    >
+                                    </textarea>
+                                </div>
+
+                                <div
+                                    class="-mr-5 -mt-10 ml-auto flex w-fit gap-3 rounded-md bg-egg-base p-2.5"
+                                >
+                                    <button
+                                        type="button"
+                                        @click="clearAnswer"
+                                        class="button whitespace-nowrap"
+                                    >
+                                        Clear Answer
+                                    </button>
+
+                                    <button type="button" class="button whitespace-nowrap">
+                                        Show Answer
+                                    </button>
+                                </div>
+                            </template>
+                        </TransitionGroup>
+                    </div>
+                </form>
             </div>
         </div>
     </Transition>
