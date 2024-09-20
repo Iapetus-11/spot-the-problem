@@ -87,11 +87,11 @@
                     {{ problemState.data!.description }}
                 </p>
                 <p class="text-sm text-cerulean-base">
-                    Select the line with the problem and justify your answer on the right.
+                    Select the line with the problem and justify your answer in the other box.
                 </p>
             </div>
 
-            <div class="flex gap-6">
+            <div class="flex gap-6 max-lg:flex-col">
                 <code
                     ref="problemCodeContainerElement"
                     class="card flex w-full flex-col overflow-x-auto whitespace-pre py-2 pl-3 pr-0"
@@ -109,8 +109,8 @@
                 </code>
 
                 <form @submit.prevent="submit" class="flex min-w-[33%] flex-col gap-3">
-                    <div class="card relative h-full w-full px-3 py-2">
-                        <TransitionGroup name="fade" mode="out-in">
+                    <div class="card relative h-full min-h-[200px] w-full px-3 py-2">
+                        <TransitionGroup name="fade">
                             <p
                                 v-if="selectedLine === null"
                                 class="absolute left-1/2 top-1/2 min-w-[90%] -translate-x-1/2 -translate-y-1/2 text-center"
@@ -126,7 +126,7 @@
 
                                     <textarea
                                         v-model="answerJustification"
-                                        class="answer-justification-textarea h-full w-full bg-transparent resize-none placeholder:opacity-50 placeholder:text-white"
+                                        class="answer-justification-textarea h-full w-full resize-none bg-transparent placeholder:text-white placeholder:opacity-50"
                                         ref="answerJustificationElement"
                                         placeholder="Type here..."
                                     >
@@ -134,7 +134,7 @@
                                 </div>
 
                                 <div
-                                    class="-mr-5 -mt-10 ml-auto flex w-fit gap-3 rounded-md bg-egg-base p-2.5"
+                                    class="-mr-5 ml-auto flex w-fit gap-3 rounded-md bg-egg-base p-2.5 mt-7 max-lg:-mb-10 lg:-mt-10"
                                 >
                                     <button
                                         type="button"

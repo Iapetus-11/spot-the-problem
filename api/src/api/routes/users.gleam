@@ -26,7 +26,9 @@ fn require_login_credentials(req: Request, continue) {
   {
     Ok(login_creds) -> continue(login_creds)
     Error(errors) ->
-      wisp.json_response(encode_errors_to_json_string(errors), 400)
+      encode_errors_to_json_string(errors)
+      |> json.to_string_builder()
+      |> wisp.json_response(400)
   }
 }
 
@@ -53,17 +55,14 @@ pub fn post_login(req: Request, ctx: Context) -> Response {
         ),
       ],
     )) -> {
-      wisp.json_response(
-        json.to_string_builder(
-          json.object([
-            #(
-              "login_hash",
-              json.string(bit_array.base64_url_encode(login_hash, False)),
-            ),
-          ]),
+      json.object([
+        #(
+          "login_hash",
+          json.string(bit_array.base64_url_encode(login_hash, False)),
         ),
-        200,
-      )
+      ])
+      |> json.to_string_builder()
+      |> wisp.json_response(200)
     }
     Ok(pgo.Returned(0, [])) -> wisp.response(403)
     _ -> wisp.internal_server_error()
@@ -73,13 +72,10 @@ pub fn post_login(req: Request, ctx: Context) -> Response {
 pub fn get_self(req: Request, ctx: Context) -> Response {
   use user <- authentication.require_authorized_user(req, ctx.db)
 
-  wisp.json_response(
-    json.to_string_builder(
-      json.object([
-        #("id", json.int(user.id)),
-        #("username", json.string(user.username)),
-      ]),
-    ),
-    200,
-  )
+  json.object([
+    #("id", json.int(user.id)),
+    #("username", json.string(user.username)),
+  ])
+  |> json.to_string_builder()
+  |> wisp.json_response(200)
 }

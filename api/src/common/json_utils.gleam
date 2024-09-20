@@ -7,6 +7,7 @@ pub type NestedObjectOrValue {
   NestedObject(dict.Dict(String, NestedObjectOrValue))
 }
 
+/// Takes a path (list of keys), the accumulator, and a value, and deeply inserts that value at that path
 pub fn paths_to_nested(
   paths: List(String),
   cum: dict.Dict(String, NestedObjectOrValue),
@@ -30,6 +31,7 @@ pub fn paths_to_nested(
   }
 }
 
+/// Convert the nested structure (made by paths_to_nested) to nested Json objects
 fn nested_to_json(nested: NestedObjectOrValue) -> json.Json {
   case nested {
     NestedValue(j) -> j
@@ -43,12 +45,13 @@ fn nested_to_json(nested: NestedObjectOrValue) -> json.Json {
   }
 }
 
+/// Converts a list of items (Path, Json) to a nested object structure
 pub fn make_nested_json_object(
   items: List(#(List(String), json.Json)),
 ) -> json.Json {
-  let obj =
-    list.fold(items, dict.new(), fn(cum, item) {
-      paths_to_nested(item.0, cum, item.1)
-    })
-  nested_to_json(NestedObject(obj))
+  list.fold(items, dict.new(), fn(cum, item) {
+    paths_to_nested(item.0, cum, item.1)
+  })
+  |> NestedObject
+  |> nested_to_json
 }
