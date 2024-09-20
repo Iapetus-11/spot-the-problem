@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   run-checks:
     runs-on: ubuntu-latest
+    environment: Production
 
     defaults:
       run:
