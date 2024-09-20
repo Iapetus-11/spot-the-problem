@@ -1,5 +1,5 @@
+import api/authentication
 import api/web.{type Context}
-import common/authentication
 import common/result_utils.{try_unwrap}
 import gleam/dict
 import gleam/int

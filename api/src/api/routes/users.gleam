@@ -1,5 +1,5 @@
+import api/authentication
 import api/web.{type Context}
-import common/authentication
 import common/dynamic_utils.{encode_errors_to_json_string}
 import gleam/bit_array
 import gleam/dynamic

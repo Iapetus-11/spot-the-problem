@@ -1,4 +1,4 @@
-import common/http.{require_header_value}
+import common/http_utils.{require_header_value}
 import common/json_utils
 import common/result_utils.{try_unwrap}
 import gleam/bit_array
