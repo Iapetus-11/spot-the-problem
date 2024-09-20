@@ -1,5 +1,5 @@
-import common/authentication
 import api/web.{type Context}
+import common/authentication
 import common/result_utils.{try_unwrap}
 import gleam/dict
 import gleam/int
@@ -63,7 +63,10 @@ pub fn get_problem(
   problem_set_name: String,
   problem_id: String,
 ) -> Response {
-  use authorized_user <- authentication.get_authorized_user_if_present(req, ctx.db)
+  use authorized_user <- authentication.get_authorized_user_if_present(
+    req,
+    ctx.db,
+  )
 
   use problem_set <- try_unwrap(case
     dict.get(ctx.problem_sets, problem_set_name)
