@@ -134,7 +134,7 @@
                                 </div>
 
                                 <div
-                                    class="-mr-5 ml-auto flex w-fit gap-3 rounded-md bg-egg-base p-2.5 mt-7 max-lg:-mb-10 lg:-mt-10"
+                                    class="-mr-5 ml-auto mt-7 flex w-fit gap-3 rounded-md bg-egg-base p-2.5 max-lg:-mb-10 lg:-mt-10"
                                 >
                                     <button
                                         type="button"

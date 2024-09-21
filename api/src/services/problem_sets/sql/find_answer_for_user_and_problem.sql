@@ -1,0 +1,1 @@
+SELECT * FROM answers WHERE user_id = $1 AND problem_set = $2 AND problem_id = $3

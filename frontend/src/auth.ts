@@ -1,26 +1,49 @@
-import { ref, type App } from 'vue';
+import { reactive, ref, type App, type Ref } from 'vue';
+import { login as _login } from './services/api/login';
+import type { AsyncDataState } from './utils';
 
-async function _logIn(username: string, password: string): Promise<string> {
-    const response = fetch(import.meta.env.VITE_API_BASE_URL, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-    });
-
-    return response.then((res) => res.json()).then((res) => res.login_hash);
+export type Auth = {
+    loginState: AsyncDataState<string>,
+    login: (username: string, password: string) => void,
+    loginHash: Ref<string>,
 }
 
+
 function auth() {
-    const loginState = ref();
-    function logIn(username: string, password: string) {
-        loginState.value = useAsyncState(_logIn(username, password));
+    const loginHash = ref(localStorage.getItem('login-hash'));
+
+    function setloginHash(v: string) {
+        loginHash.value = v;
+        localStorage.setItem('login-hash', v);
+    }
+
+    const loginState = reactive<AsyncDataState<string>>({
+        loading: false,
+        error: null,
+        data: null,
+        cancel: null,
+    });
+    async function login(username: string, password: string) {
+        loginState.loading = true;
+
+        const { data, cancel } = _login(username, password);
+        loginState.cancel = cancel;
+
+        try {
+            loginState.data = await data;
+            setloginHash(loginState.data);
+        } catch (error) {
+            console.error(error);
+            loginState.error = error;
+        }
+
+        loginState.loading = false;
     }
 
     return {
         loginState,
-        logIn,
+        login,
+        loginHash,
     };
 }
 

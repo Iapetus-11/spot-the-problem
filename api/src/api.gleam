@@ -5,7 +5,7 @@ import gleam/erlang/process
 import gleam/pgo
 import mist
 import router
-import services/problem_sets.{list_problem_sets}
+import services/problem_sets/problem_sets.{list_problem_sets}
 import wisp
 import wisp/wisp_mist
 

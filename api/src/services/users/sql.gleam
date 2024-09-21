@@ -1,5 +1,4 @@
 import decode
-import gleam/option.{type Option}
 import gleam/pgo
 
 /// A row you get from running the `find_user_from_username_and_password` query
@@ -11,8 +10,8 @@ import gleam/pgo
 pub type FindUserFromUsernameAndPasswordRow {
   FindUserFromUsernameAndPasswordRow(
     id: Int,
-    username: Option(String),
-    login_hash: Option(BitArray),
+    username: String,
+    login_hash: BitArray,
   )
 }
 
@@ -35,12 +34,14 @@ pub fn find_user_from_username_and_password(db, arg_1, arg_2) {
       )
     })
     |> decode.field(0, decode.int)
-    |> decode.field(1, decode.optional(decode.string))
-    |> decode.field(2, decode.optional(decode.bit_array))
+    |> decode.field(1, decode.string)
+    |> decode.field(2, decode.bit_array)
 
   "SELECT * FROM users WHERE login_hash = SHA512(($1 || '#' || $2)::BYTEA);"
-  |> pgo.execute(db, [pgo.text(arg_1), pgo.text(arg_2)], decode.from(decoder, _))
+  |> pgo.execute(db, [pgo.text(arg_1), pgo.text(arg_2)], decode.from(decoder, _),
+  )
 }
+
 
 /// A row you get from running the `find_user_from_login_hash` query
 /// defined in `./src/services/users/sql/find_user_from_login_hash.sql`.
@@ -49,11 +50,7 @@ pub fn find_user_from_username_and_password(db, arg_1, arg_2) {
 /// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub type FindUserFromLoginHashRow {
-  FindUserFromLoginHashRow(
-    id: Int,
-    username: Option(String),
-    login_hash: Option(BitArray),
-  )
+  FindUserFromLoginHashRow(id: Int, username: String, login_hash: BitArray)
 }
 
 /// Runs the `find_user_from_login_hash` query
@@ -75,8 +72,8 @@ pub fn find_user_from_login_hash(db, arg_1) {
       )
     })
     |> decode.field(0, decode.int)
-    |> decode.field(1, decode.optional(decode.string))
-    |> decode.field(2, decode.optional(decode.bit_array))
+    |> decode.field(1, decode.string)
+    |> decode.field(2, decode.bit_array)
 
   "SELECT * FROM users WHERE login_hash = $1;"
   |> pgo.execute(db, [pgo.bytea(arg_1)], decode.from(decoder, _))

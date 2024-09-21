@@ -21,6 +21,10 @@
         @apply flex items-center rounded-lg bg-peach-base p-1.5 px-2 text-salmon-base transition-colors hover:bg-salmon-base hover:text-peach-base;
     }
 
+    .button-blue {
+        @apply flex items-center rounded-lg bg-cerulean-base p-1.5 px-2 text-peach-base transition-colors hover:bg-verdigris-base;
+    }
+
     .card {
         @apply rounded-md bg-salmon-base text-white shadow-sm shadow-peach-base;
     }

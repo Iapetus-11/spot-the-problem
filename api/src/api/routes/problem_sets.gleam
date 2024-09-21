@@ -5,9 +5,12 @@ import gleam/dict
 import gleam/int
 import gleam/json
 import gleam/list
+import gleam/option
 import gleam/order
+import gleam/pgo
 import gleam/string
-import services/problem_sets
+import services/problem_sets/problem_sets
+import services/problem_sets/sql as problem_sets_sql
 import wisp.{type Request, type Response}
 
 pub fn get_list(_req: Request, ctx: Context) -> Response {
@@ -85,6 +88,25 @@ pub fn get_problem(
   let #(problem_info, problem_content) =
     problem_sets.get_problem_info_with_content(problem_set_name, problem_name)
 
+  let user_answer = case authorized_user {
+    Ok(user) ->
+      case
+        problem_sets_sql.find_answer_for_user_and_problem(
+          ctx.db,
+          user.id,
+          problem_set_name,
+          problem_id,
+        )
+      {
+        Ok(pgo.Returned(1, [answer])) -> option.Some([
+          #("answer", json.string(answer.answer)),
+          #("line", json.int(answer.answer_line)),
+        ])
+        _ -> option.None
+      }
+    _ -> option.None
+  }
+
   json.object([
     #("id", json.string(problem_info.id)),
     #("name", json.string(problem_info.name)),
@@ -93,6 +115,7 @@ pub fn get_problem(
     #("answer", json.string(problem_info.answer)),
     #("difficulty", json.int(problem_info.difficulty)),
     #("content", json.string(problem_content)),
+    #("user_answer", json.nullable(user_answer, json.object)),
   ])
   |> json.to_string_builder()
   |> wisp.json_response(200)

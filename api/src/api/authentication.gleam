@@ -4,7 +4,6 @@ import common/result_utils.{try_unwrap}
 import gleam/bit_array
 import gleam/json
 import gleam/list
-import gleam/option
 import gleam/pgo
 import gleam/string
 import services/users/sql as users_sql
@@ -53,10 +52,8 @@ pub fn get_authorized_user_if_present(
   use login_hash <- require_base64_authorization_header(auth_header)
 
   case users_sql.find_user_from_login_hash(db, login_hash) {
-    Ok(pgo.Returned(
-      1,
-      [users_sql.FindUserFromLoginHashRow(id, option.Some(username), _)],
-    )) -> continue(Ok(AuthorizedUser(id, username)))
+    Ok(pgo.Returned(1, [users_sql.FindUserFromLoginHashRow(id, username, _)])) ->
+      continue(Ok(AuthorizedUser(id, username)))
     Ok(pgo.Returned(0, [])) -> continue(Error(Nil))
     _ -> wisp.internal_server_error()
   }
@@ -72,10 +69,8 @@ pub fn require_authorized_user(
   use login_hash <- require_base64_authorization_header(auth_header)
 
   case users_sql.find_user_from_login_hash(db, login_hash) {
-    Ok(pgo.Returned(
-      1,
-      [users_sql.FindUserFromLoginHashRow(id, option.Some(username), _)],
-    )) -> continue(AuthorizedUser(id, username))
+    Ok(pgo.Returned(1, [users_sql.FindUserFromLoginHashRow(id, username, _)])) ->
+      continue(AuthorizedUser(id, username))
     Ok(pgo.Returned(0, [])) -> wisp.response(403)
     _ -> wisp.internal_server_error()
   }

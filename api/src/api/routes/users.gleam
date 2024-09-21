@@ -5,7 +5,6 @@ import gleam/bit_array
 import gleam/dynamic
 import gleam/http
 import gleam/json
-import gleam/option
 import gleam/pgo
 import services/users/sql as users_sql
 import wisp.{type Request, type Response}
@@ -51,7 +50,7 @@ pub fn post_login(req: Request, ctx: Context) -> Response {
         users_sql.FindUserFromUsernameAndPasswordRow(
           _,
           _,
-          option.Some(login_hash),
+          login_hash,
         ),
       ],
     )) -> {
