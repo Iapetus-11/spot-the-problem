@@ -1,6 +1,6 @@
 import api/authentication
 import api/web.{type Context}
-import common/dynamic_utils.{encode_errors_to_json_string}
+import common/dynamic_utils.{encode_errors_to_json}
 import gleam/bit_array
 import gleam/dynamic
 import gleam/http
@@ -26,7 +26,7 @@ fn require_login_credentials(req: Request, continue) {
   {
     Ok(login_creds) -> continue(login_creds)
     Error(errors) ->
-      encode_errors_to_json_string(errors)
+      encode_errors_to_json(errors)
       |> json.to_string_builder()
       |> wisp.json_response(400)
   }

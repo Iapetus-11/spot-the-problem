@@ -3,7 +3,7 @@ import gleam/dynamic.{type DecodeError}
 import gleam/json
 import gleam/list
 
-pub fn encode_errors_to_json_string(errors: List(DecodeError)) -> json.Json {
+pub fn encode_errors_to_json(errors: List(DecodeError)) -> json.Json {
   list.map(errors, fn(err) {
     #(
       err.path,
