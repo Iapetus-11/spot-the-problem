@@ -38,10 +38,8 @@ pub fn find_user_from_username_and_password(db, arg_1, arg_2) {
     |> decode.field(2, decode.bit_array)
 
   "SELECT * FROM users WHERE login_hash = SHA512(($1 || '#' || $2)::BYTEA);"
-  |> pgo.execute(db, [pgo.text(arg_1), pgo.text(arg_2)], decode.from(decoder, _),
-  )
+  |> pgo.execute(db, [pgo.text(arg_1), pgo.text(arg_2)], decode.from(decoder, _))
 }
-
 
 /// A row you get from running the `find_user_from_login_hash` query
 /// defined in `./src/services/users/sql/find_user_from_login_hash.sql`.

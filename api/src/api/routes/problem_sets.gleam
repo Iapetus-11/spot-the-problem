@@ -98,10 +98,11 @@ pub fn get_problem(
           problem_id,
         )
       {
-        Ok(pgo.Returned(1, [answer])) -> option.Some([
-          #("answer", json.string(answer.answer)),
-          #("line", json.int(answer.answer_line)),
-        ])
+        Ok(pgo.Returned(1, [answer])) ->
+          option.Some([
+            #("answer", json.string(answer.answer)),
+            #("line", json.int(answer.answer_line)),
+          ])
         _ -> option.None
       }
     _ -> option.None

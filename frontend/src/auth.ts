@@ -3,11 +3,10 @@ import { login as _login } from './services/api/login';
 import type { AsyncDataState } from './utils';
 
 export type Auth = {
-    loginState: AsyncDataState<string>,
-    login: (username: string, password: string) => void,
-    loginHash: Ref<string>,
-}
-
+    loginState: AsyncDataState<string>;
+    login: (username: string, password: string) => void;
+    loginHash: Ref<string>;
+};
 
 function auth() {
     const loginHash = ref(localStorage.getItem('login-hash'));

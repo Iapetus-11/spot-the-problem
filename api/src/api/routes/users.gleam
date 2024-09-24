@@ -46,13 +46,7 @@ pub fn post_login(req: Request, ctx: Context) -> Response {
   {
     Ok(pgo.Returned(
       1,
-      [
-        users_sql.FindUserFromUsernameAndPasswordRow(
-          _,
-          _,
-          login_hash,
-        ),
-      ],
+      [users_sql.FindUserFromUsernameAndPasswordRow(_, _, login_hash)],
     )) -> {
       json.object([
         #(
