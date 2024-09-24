@@ -6,6 +6,6 @@
 - To run the API, `cd api && gleam run`
 - To run the front-end, `cd frontend && npm run dev`
 
-## (WIP) Demo Video
+## (Unfinished) Demo Video
 
-https://github.com/user-attachments/assets/7bf06469-7885-4de4-b8bc-e198ca93b745
+https://github.com/user-attachments/assets/e650b153-b892-4458-ad4e-e78c02825fb9
