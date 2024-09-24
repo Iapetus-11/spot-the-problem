@@ -22,7 +22,7 @@
     }
 
     .button-blue {
-        @apply flex items-center rounded-lg bg-cerulean-base p-1.5 px-2 text-peach-base transition-colors hover:bg-verdigris-base;
+        @apply flex items-center rounded-lg bg-cerulean-base p-1.5 px-2 text-white transition-colors hover:bg-verdigris-base;
     }
 
     .card {
